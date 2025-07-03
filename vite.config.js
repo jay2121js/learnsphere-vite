@@ -1,10 +1,22 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'public/_redirects', // ✅ path to your _redirects file
+          dest: '.'                 // ✅ place it in root of dist/
+        }
+      ]
+    })
+  ],
   server: {
-    port: 3000, // ✅ Change port here
+    port: 3000,
   },
 });
