@@ -80,7 +80,7 @@ const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
     }
   };
   const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
-  const clientId = import.meta.env.GOOGLE_CLIENT_ID;
+ const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const handleGoogleLogin = () => {
     const googleLoginUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=email%20profile&access_type=offline&prompt=consent`;
     window.location.href = googleLoginUrl;

@@ -21,7 +21,7 @@ function Signup() {
   });
   const hasFetched = useRef(false); // Prevents multiple OAuth fetch requests
 
-  const clientId = import.meta.env.GOOGLE_CLIENT_ID;;
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
   const backendUri = import.meta.env.VITE_BACKEND_URI;
 
