@@ -12,7 +12,9 @@ const { login, fetchSession } = useAuth();
 useEffect(() => {
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
-const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
+ const mainUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
+  const redirectUri = mainUri + '/signup';
+
   const backendUri = import.meta.env.VITE_BACKEND_URI;
 
   if (code) {
@@ -79,7 +81,8 @@ const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
       setError(`Failed to connect to the server: ${err.message}.`);
     }
   };
-  const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
+   const mainUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
+  const redirectUri = mainUri + '/signup';
  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const handleGoogleLogin = () => {
     const googleLoginUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=email%20profile&access_type=offline&prompt=consent`;

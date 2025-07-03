@@ -22,7 +22,9 @@ function Signup() {
   const hasFetched = useRef(false); // Prevents multiple OAuth fetch requests
 
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
+  const mainUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
+  const redirectUri = mainUri + '/login';
+
   const backendUri = import.meta.env.VITE_BACKEND_URI;
 
   const role = sessionStorage.getItem('oauth_role');
