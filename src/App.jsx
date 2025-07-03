@@ -35,7 +35,6 @@ const App = () => {
             <Route path="/about" element={<Layout>  <AboutUsPage /></Layout>  } />
             <Route path="/stream/:courseId" element={<Layout><VideoStreamingPage /></Layout>} />
             <Route path="/settings" element={<Layout><SettingsPage/></Layout>} />
-
           </Routes>
         </ErrorBoundary>
       </HeroProvider>
