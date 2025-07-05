@@ -18,6 +18,9 @@ const SettingsPage = () => {
   });
   const [accountStatus, setAccountStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [isSavingAccount, setIsSavingAccount] = useState(false);
+
 
   // Fetch profile data on component mount
   useEffect(() => {
@@ -74,50 +77,60 @@ const SettingsPage = () => {
   };
 
   // Handle Profile form submission
-  const handleProfileSubmit = async (e) => {
-    e.preventDefault();
-    setProfileStatus(null);
+const handleProfileSubmit = async (e) => {
+  e.preventDefault();
+  setProfileStatus(null);
+  setIsSavingProfile(true); // Start loading
 
-    const validation = validateProfileForm();
-    if (!validation.valid) {
-      setProfileStatus({ type: 'error', message: validation.message });
-      return;
-    }
+  const validation = validateProfileForm();
+  if (!validation.valid) {
+    setProfileStatus({ type: 'error', message: validation.message });
+    setIsSavingProfile(false); // Stop loading
+    return;
+  }
 
-    try {
-      const payload = new FormData();
-      payload.append('username', profileForm.username);
-      payload.append('fullName', profileForm.name);
-      payload.append('gender', profileForm.gender);
-      payload.append('phone', profileForm.phone);
-      payload.append('address', profileForm.address);
-      payload.append('email', profileForm.email);
+  try {
+    const payload = new FormData();
+    payload.append('username', profileForm.username);
+    payload.append('fullName', profileForm.name);
+    payload.append('gender', profileForm.gender);
+    payload.append('phone', profileForm.phone);
+    payload.append('address', profileForm.address);
+    payload.append('email', profileForm.email);
 
-      const response = await courseService.updateProfile(payload);
-      setProfileStatus({ type: 'success', message: 'Profile updated successfully!' });
-    } catch (error) {
-      setProfileStatus({ type: 'error', message: error.message || 'An error occurred' });
-    }
-  };
+    await courseService.updateProfile(payload);
+    setProfileStatus({ type: 'success', message: 'Profile updated successfully!' });
+  } catch (error) {
+    setProfileStatus({ type: 'error', message: error.message || 'An error occurred' });
+  } finally {
+    setIsSavingProfile(false); // Stop loading
+  }
+};
+
 
   // Handle Account form submission
   const handleAccountSubmit = async (e) => {
-    e.preventDefault();
-    if (accountForm.password !== accountForm.confirmPassword) {
-      setAccountStatus({ type: 'error', message: 'Passwords do not match' });
-      return;
-    }
-    setAccountStatus(null);
-    try {
-      const payload = new FormData();
-      payload.append('password', accountForm.confirmPassword)
-      const response = await courseService.updatePassword(payload);
-      setAccountStatus({ type: 'success', message: 'Account updated successfully!' });
-      }
-     catch (error) {
-      setAccountStatus({ type: 'error', message: error.message || 'An error occurred' });
-    }
-  };
+  e.preventDefault();
+  if (accountForm.password !== accountForm.confirmPassword) {
+    setAccountStatus({ type: 'error', message: 'Passwords do not match' });
+    return;
+  }
+
+  setIsSavingAccount(true); // Start loading
+  setAccountStatus(null);
+
+  try {
+    const payload = new FormData();
+    payload.append('password', accountForm.confirmPassword);
+    await courseService.updatePassword(payload);
+    setAccountStatus({ type: 'success', message: 'Account updated successfully!' });
+  } catch (error) {
+    setAccountStatus({ type: 'error', message: error.message || 'An error occurred' });
+  } finally {
+    setIsSavingAccount(false); // Stop loading
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gray-800 text-gray-100 font-sans">
@@ -258,14 +271,18 @@ const SettingsPage = () => {
                       {profileStatus.message}
                     </p>
                   )}
-                  <motion.button
+                 <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     type="submit"
-                    className="mt-6 w-full px-6 py-3 bg-teal-500 text-white font-semibold rounded-md hover:bg-teal-600 focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-gray-800 transition duration-300 ease-in-out"
+                    disabled={isSavingProfile}
+                    className={`mt-6 w-full px-6 py-3 font-semibold rounded-md transition duration-300 ease-in-out ${
+                      isSavingProfile ? 'bg-teal-400 cursor-not-allowed' : 'bg-teal-500 hover:bg-teal-600'
+                    }`}
                   >
-                    Save Profile
+                    {isSavingProfile ? 'Saving...' : 'Save Profile'}
                   </motion.button>
+
                 </form>
               </section>
 
@@ -312,14 +329,18 @@ const SettingsPage = () => {
                       {accountStatus.message}
                     </p>
                   )}
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    type="submit"
-                    className="mt-6 w-full px-6 py-3 bg-teal-500 text-white font-semibold rounded-md hover:bg-teal-600 focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-gray-800 transition duration-300 ease-in-out"
-                  >
-                    Save Account
-                  </motion.button>
+                 <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  type="submit"
+                  disabled={isSavingAccount}
+                  className={`mt-6 w-full px-6 py-3 font-semibold rounded-md transition duration-300 ease-in-out ${
+                    isSavingAccount ? 'bg-teal-400 cursor-not-allowed' : 'bg-teal-500 hover:bg-teal-600'
+                  }`}
+                >
+                  {isSavingAccount ? 'Saving...' : 'Save Account'}
+                </motion.button>
+
                 </form>
               </section>
             </motion.div>

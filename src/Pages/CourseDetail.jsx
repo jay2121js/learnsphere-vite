@@ -216,8 +216,6 @@ const CourseDetail = () => {
       };
 
       modalRef.current.addEventListener('keydown', handleKeyDown);
-      firstElement?.focus();
-
       return () => modalRef.current?.removeEventListener('keydown', handleKeyDown);
     };
 

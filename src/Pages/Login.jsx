@@ -12,9 +12,7 @@ const { login, fetchSession } = useAuth();
 useEffect(() => {
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
- const mainUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
-  const redirectUri = mainUri + '/signup';
-
+  const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
   const backendUri = import.meta.env.VITE_BACKEND_URI;
 
   if (code) {
@@ -49,45 +47,43 @@ useEffect(() => {
 
 
   const handleLoginSubmit = async (e) => {
-  e.preventDefault();
-  const username = e.target[0].value;
-  const password = e.target[1].value;
+    e.preventDefault();
+    const username = e.target[0].value;
+    const password = e.target[1].value;
+     const backendUri = import.meta.env.VITE_BACKEND_URI;
 
-  if (password.length < 6) {
-    setError('Password must be at least 6 characters long.');
-    return;
-  }
 
-  try {
-    const response = await fetch(`${backendUri}/Public/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-      credentials: 'include',
-    });
-
-    console.log('Response status:', response.status);
-    console.log('Response headers:', [...response.headers.entries()]);
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Response data:', data);
-      const userData = { name: data.username, avatar: data.avatar };
-      login(userData);
-      setError('');
-      navigate('/');
-    } else {
-      const errorText = await response.text();
-      setErrorrese
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long.');
+      return;
     }
-  } catch (err) {
-    console.error('Login error:', err);
-    setError(`Failed to connect to the server: ${err.message}.`);
-  }
-};
-   const mainUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
-  const redirectUri = mainUri + '/signup';
- const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+    try {
+      const response = await fetch(`${backendUri}/Public/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const userData = { name: data.username, avatar: data.avatar };
+        login(userData);
+        setError('');
+        navigate('/');
+      } else {
+        const errorText = await response.text();
+        setError(errorText || 'Invalid username or password.');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError(`Failed to connect to the server: ${err.message}.`);
+    }
+  };
+  const base = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
+  const redirectUri = base + '/login';
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const handleGoogleLogin = () => {
     const googleLoginUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=email%20profile&access_type=offline&prompt=consent`;
     window.location.href = googleLoginUrl;

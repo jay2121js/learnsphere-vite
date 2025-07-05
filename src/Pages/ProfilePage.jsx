@@ -39,6 +39,8 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [avatarFilter] = useState('none');
   const [showShareModal, setShowShareModal] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
+
 
   const defaultAvatar = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde';
 
@@ -135,10 +137,11 @@ const ProfilePage = () => {
   };
 
   const handleSave = async () => {
+    setSaveLoading(true);
     try {
       const formData = new FormData();
       formData.append('username', user.username);
-      formData.append('name', user.name);
+      formData.append('fullName', user.name);
       formData.append('gender', user.gender || '');
       formData.append('email', user.email);
       formData.append('phone', user.phone || '');
@@ -149,6 +152,8 @@ const ProfilePage = () => {
     } catch (err) {
       console.error('Failed to save user data:', err);
       toast.error('Failed to update profile.');
+    }finally{
+          setSaveLoading(false);
     }
   };
 
@@ -276,12 +281,15 @@ const ProfilePage = () => {
             </div>
             {isEditing && (
               <div className="mt-6 flex justify-end">
-                <button
-                  onClick={handleSave}
-                  className="px-6 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors"
-                >
-                  Save Changes
-                </button>
+               <button
+              onClick={handleSave}
+              disabled={saveLoading}
+              className={`px-6 py-2 rounded-lg transition-colors ${
+                saveLoading ? 'bg-teal-400 cursor-not-allowed' : 'bg-teal-500 hover:bg-teal-600'
+              } text-white`}
+            >
+              {saveLoading ? 'Saving...' : 'Save Changes'}
+            </button>
               </div>
             )}
           </div>

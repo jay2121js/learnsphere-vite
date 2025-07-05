@@ -7,5 +7,4 @@ export default defineConfig({
   server: {
     port: 3000, // ✅ Change port here
   },
-  base: '/', // Critical for Render to ensure correct asset paths
 });
