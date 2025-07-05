@@ -20,7 +20,7 @@ useEffect(() => {
     setError('');
 
      fetch(`${backendUri}/auth/google/login/callback?code=${code}`, {
-      method: 'POST',
+      method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       body: null,
       credentials: 'include',
