@@ -21,10 +21,9 @@ function Signup() {
   });
   const hasFetched = useRef(false); // Prevents multiple OAuth fetch requests
 
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  const mainUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
-  const redirectUri = mainUri + '/login';
-
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;;
+  const base = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
+  const redirectUri = base + "/signup"
   const backendUri = import.meta.env.VITE_BACKEND_URI;
 
   const role = sessionStorage.getItem('oauth_role');
