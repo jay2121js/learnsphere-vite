@@ -1,8 +1,23 @@
+/**
+ * @fileoverview Authentication Context Provider for LearnSphere
+ * Manages user authentication state, Google OAuth integration, and session handling
+ */
+
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Authentication context for managing user state across the application
+ */
 const AuthContext = createContext();
 
+/**
+ * AuthProvider component that provides authentication context to child components
+ * 
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components to wrap with auth context
+ * @returns {JSX.Element} Provider component with authentication state and methods
+ */
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return localStorage.getItem('isLoggedIn') === 'true';
@@ -128,4 +143,19 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+/**
+ * Custom hook to access authentication context
+ * 
+ * @returns {Object} Authentication context value with state and methods
+ * @returns {boolean} returns.isLoggedIn - Whether user is currently logged in
+ * @returns {Object|null} returns.user - Current user object or null
+ * @returns {Function} returns.login - Function to initiate login process
+ * @returns {Function} returns.logout - Function to logout user
+ * @returns {Function} returns.getAuthHeaders - Function to get authentication headers
+ * @returns {Function} returns.fetchSession - Function to fetch current session
+ * @returns {boolean} returns.isLoading - Whether authentication operations are in progress
+ * 
+ * @example
+ * const { isLoggedIn, user, login, logout } = useAuth();
+ */
 export const useAuth = () => useContext(AuthContext);
