@@ -1,8 +1,27 @@
+/**
+ * @fileoverview Course Service API Integration
+ * Handles all course-related API calls for LearnSphere application
+ */
+
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URI;
 
+/**
+ * Course service object containing all course-related API methods
+ */
 const courseService = {
+  /**
+   * Fetches a single course by ID
+   * 
+   * @param {string|number} courseId - The ID of the course to fetch
+   * @returns {Promise<Object>} Course data object
+   * @throws {Error} When course cannot be fetched or doesn't exist
+   * 
+   * @example
+   * const course = await courseService.getCourse(123);
+   * console.log(course.title); // "React Fundamentals"
+   */
   getCourse: async (courseId) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/Public/course/${courseId}`);
@@ -13,6 +32,19 @@ const courseService = {
     }
   },
 
+  /**
+   * Checks if a user owns/instructs a specific course
+   * 
+   * @param {string|number} courseId - The ID of the course to check
+   * @param {string} email - The email of the user to check ownership for
+   * @returns {Promise<boolean>} True if user owns the course, false otherwise
+   * 
+   * @example
+   * const isOwner = await courseService.checkCourseOwnership(123, 'instructor@example.com');
+   * if (isOwner) {
+   *   // Show edit options
+   * }
+   */
   checkCourseOwnership: async (courseId, email) => {
     try {
       const response = await axios.get(
